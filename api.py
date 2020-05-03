@@ -1,3 +1,4 @@
+import requests
 from flask import Flask
 from flask_restful import Resource, Api , reqparse
 
@@ -6,10 +7,10 @@ app = Flask(__name__)
 api = Api(app)
 
 parser = reqparse.RequestParser()
-
 parser.add_argument('q', action= 'append')
+parser.add_argument('id')
 
-perf = ['Conservador', 'Moderado', 'Arrojado']
+perf = ['conservador', 'moderado', 'arrojado']
 quest = {
         0:{'a':0,'b':2,'c':3,'d':4},
         1:{'a':0,'b':2,'c':4,'d':5},
@@ -24,8 +25,6 @@ quest = {
 
 alternativs = ['a','b','c','d']
 
-res = [0,0,0,0,0,0,0,0]
-
 class ClientProfile(Resource):
 
     
@@ -35,16 +34,17 @@ class ClientProfile(Resource):
     def post(self):
         args = parser.parse_args()
         alt = args['q']
+        soma = 0
         for i in range (0,len(quest)):
             if alt[i] not in alternativs:
                 erro = 1
                 break
             else:
                 erro = 0
-                res[i] = quest[i][alt[i]]
+                soma += quest[i][alt[i]]
 
         if erro == 0:
-            soma = sum(res)
+            
             if soma <= 9:
                 resposta = perf[0]
             
@@ -54,16 +54,20 @@ class ClientProfile(Resource):
             else:
                 resposta = perf[2]
 
+            payload = {'id': args['id'], 'perfil': resposta}
+            r = requests.post('/cliente/set/perfil', data = payload)
+
         else:
             resposta = 'Entrada inválida'
 
-              
-        return {'result_sum':resposta} , 201
+        if(r.status_code == 200):
+            status = 'Sucesso'
+        else:
+            status = 'Falha'
+
+        return {"Inserção_banco" : status, "Perfil": resposta } , 201
 
    
-
-
-
 api.add_resource(ClientProfile,
         '/',
         '/sum')
