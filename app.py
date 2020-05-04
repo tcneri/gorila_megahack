@@ -54,23 +54,23 @@ class ClientProfile(Resource):
             else:
                 resposta = perf[2]
 
-           # payload = {'id': args['id'], 'perfil': resposta}
-           # r = requests.post('/cliente/set/perfil', data = payload)
+            payload = {'id': args['id'], 'perfil': resposta}
+            r = requests.post('http://wmonitor.tk:50124/cliente/set/perfil', params = payload)
 
         else:
             resposta = 'Entrada inválida'
 
-        #if(r.status_code == 200):
-        #    status = 'Sucesso'
-        #else:
-        #    status = 'Falha'
-        status = 'Falha'
+        if(r.status_code == 200):
+            status = 'Sucesso'
+        else:
+            status = 'Falha'
+        
 
-        return {"Inserção_banco" : status, "Perfil": resposta } , 201
+        return {"Inserção_banco" : status , "Perfil": resposta } , 201
 
    
 api.add_resource(ClientProfile,
         '/')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=False)
+    app.run(host="0.0.0.0",port=50123)

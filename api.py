@@ -28,8 +28,6 @@ alternativs = ['a','b','c','d']
 class ClientProfile(Resource):
 
     
-    def get(self):
-        return {'teu perfil': 'ok'}
     
     def post(self):
         args = parser.parse_args()
@@ -73,4 +71,4 @@ api.add_resource(ClientProfile,
         '/sum')
 
 if __name__ == '__main__':
-    app.run(host="localhost",debug=True)
+    app.run(host="0.0.0.0",debug=True)
