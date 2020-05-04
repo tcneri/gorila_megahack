@@ -55,7 +55,7 @@ class ClientProfile(Resource):
                 resposta = perf[2]
 
             payload = {'id': args['id'], 'perfil': resposta}
-            r = requests.post('/cliente/set/perfil', data = payload)
+            r = requests.post('http://wmonitor.tk:50124/cliente/set/perfil', data = payload)
 
         else:
             resposta = 'Entrada inválida'
@@ -73,4 +73,4 @@ api.add_resource(ClientProfile,
         '/sum')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="localhost",debug=True)
